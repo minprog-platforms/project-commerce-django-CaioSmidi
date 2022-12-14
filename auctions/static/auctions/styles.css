@@ -1,3 +1,50 @@
 body {
     padding: 10px;
 }
+
+.listing_item {
+    color: black;
+}
+
+.listing_image {
+    height: 100px;
+    background-color: blue;
+    align-items: center;
+}
+
+.listing_image img {
+    height: 100px;
+    width: auto%;
+    background-color: blue;
+}
+
+.listing_title {
+
+}
+
+.listing_price {
+
+}
+
+.listing_description {
+
+}
+
+.create_listing {
+    padding-top: 30px;
+    padding-left: 15px;
+}
+
+.submit_listing {
+    margin-top: 150px;
+    margin-left: 150px;
+}
+
+.create_listing_form {
+    padding-right: 10px;
+}
+
+.category_options {
+    margin-top: 20px    ;
+    margin-bottom: 10px;
+}

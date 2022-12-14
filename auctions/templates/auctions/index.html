@@ -3,5 +3,39 @@
 {% block body %}
     <h2>Active Listings</h2>
 
-    TODO
+    {% for listing in active_listings %}
+
+        <div class="listing_item">
+            <a href="{% url 'listing' listing_id=listing.id %}">
+
+                {% if listing.image_URL %}
+                    <div class="listing_image">
+                        <img src="{{ listing.image_URL }}" alt="Picture of {{ listing.title }}">
+                    </div>
+                {% endif %}
+
+                <div class="listing_title">
+                    {{ listing.title }}
+                </div>
+
+                <div class="listing_price">
+                    {{ listing.starting_bid }}
+                </div>
+
+                <div class="listing_description">
+                    {{ listing.description }}
+                </div>
+
+                <div class="listing_owner">
+                    Listed by: {{ listing.owner }}
+                </div>
+
+
+            </a>
+        </div>
+
+    {% empty %}
+        <br><br>
+        <h3>No active listings..</h3>
+    {% endfor %}
 {% endblock %}

@@ -1,0 +1,14 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Your listing: {{ listing.title }}</h2>
+
+    {% if listing.active %}
+        This listing is active
+    {% endif %}
+
+    {% if not listing.active %}
+        This listing is not active
+    {% endif %}
+
+{% endblock %}

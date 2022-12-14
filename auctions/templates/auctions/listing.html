@@ -1,0 +1,31 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>{{ title }}</h2>
+
+    {% if active %}
+
+        {% if image %}
+            <div class="listing_image">
+                <img src="{{ image }}" alt="Photo of {{ title }}">
+            </div>
+
+        {% endif %}
+
+        {{ description }}
+
+        {% if price %}
+            {{ price }}
+        {% else %}
+            No biddings on this item yet!
+        {% endif %}
+
+        Sold by: {{ owner }}
+
+
+    {% else %}
+        This listing is not active anymore.
+    {% endif %}
+
+
+{% endblock %}
