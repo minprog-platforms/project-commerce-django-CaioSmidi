@@ -3,8 +3,10 @@
 {% block body %}
     <h2>{{ listing.title }}</h2>
 
-    {% if listing.active %}
-        This listing is active
+    {% if request.user == highest_bid.bidder %}
+        You have won this listing!
+    {% else %}
+        This listing is closed..
     {% endif %}
 
 

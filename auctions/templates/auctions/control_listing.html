@@ -1,28 +1,42 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Your listing: {{ title }}</h2>
+    <h2>{{ listing.title }}</h2>
 
-    {% if active %}
+    {% if listing.active %}
 
-        {% if image %}
-            <div class="listing_image">
-                <img src="{{ image }}" alt="Photo of {{ title }}">
+        {% if user.is_authenticated %}
+            {% if listing.watchlist %}
+                <form class="" action="" method="post">
+                    {% csrf_token %}
+                    <input type="submit" name="rm_watchlist" value="Remove from Watchlist">
+                </form>
+            {% else %}
+                <form class="" action="" method="post">
+                    {% csrf_token %}
+                    <input type="submit" name="add_watchlist" value="Add to Watchlist">
+                </form>
+            {% endif %}
+        {% endif %}
+
+            <div class="auction_item">
+                {% if listing.image_URL %}
+                    <div class="listing_image">
+                        <img src="{{ listing.image_URL }}" alt="Photo of {{ listing.title }}">
+                    </div>
+
+                {% endif %}
+
+                {{ listing.description }}
+
+                Price: €{{ listing.bid_price }}
+
+                Sold by: {{ listing.owner }}
             </div>
 
-        {% endif %}
-
-        {{ description }}
-
-        {% if price %}
-            <h3>Current price for item: </h3>{{ price }}
-        {% else %}
-            No biddings on this item yet!
-        {% endif %}
-
-        
     {% else %}
-        <h2>This listing is not active</h2>
+        This listing is not active anymore.
     {% endif %}
+
 
 {% endblock %}

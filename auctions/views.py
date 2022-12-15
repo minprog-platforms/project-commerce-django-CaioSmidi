@@ -6,20 +6,14 @@ from django.urls import reverse
 from django import forms
 
 
-from .models import User, Listing, Watchlist
+from .models import User, Listing, Watchlist, Bid, Comment
 
 
 class NewListingForm(forms.ModelForm):
 
-    # title = forms.CharField(max_length=64)
-    # description = forms.CharField(max_length=128)
-    # image_URL = forms.URLField(required=False)
-    # starting_bid = forms.DecimalField(max_digits=64, decimal_places=2)
-    # category = forms.ChoiceField(required=False, choices=Listing.categories)
-
     class Meta:
         model = Listing
-        fields = ["title", "description", "image_URL", "starting_bid", "category"]
+        fields = ["title", "description", "image_URL", "price", "category"]
         widgets = {
             "title": forms.TextInput(attrs={
                     "class": "form-control",
@@ -33,7 +27,7 @@ class NewListingForm(forms.ModelForm):
                     "class": "form-control",
                     "placeholder": "Place the URL of your image here"
                 }),
-            "starting_bid": forms.NumberInput(attrs={
+            "price": forms.NumberInput(attrs={
                     "class": "form-control",
                     "placeholder": "Place your starting price here (in €)"
                 }),
@@ -41,22 +35,43 @@ class NewListingForm(forms.ModelForm):
                     "class": "form-control",
                     "placeholder": "Pick your category"
                 }),
+            }
 
+class BiddingForm(forms.ModelForm):
+
+    class Meta:
+        model = Bid
+        fields = ["bid_price"]
+        widgets = {
+            "bid_price": forms.NumberInput(attrs={
+                    "class": "form-control",
+                    "placeholder": "Place the amount of your bid",
+                    "style": "width: 300px;"
+                })
         }
 
-# class BiddingForm(forms.ModelForm):
+# class WatchlistForm(forms.ModelForm):
 #
 #     class Meta:
-#         model = Bid
-#         fields = ["price_bid"]
-#
-#
-# class PlaceCommentForm(forms.ModelForm):
-#     pass
-#
-#     class Meta:
-#         model = Comment
-#         fields = ["listing", "commenter", "comment"]
+#         model = Watchlist
+#         fields = ["watchlist"]
+#         widgets = {
+#             "watchlist": forms.Selec
+#         }
+
+
+class PlaceCommentForm(forms.ModelForm):
+
+    class Meta:
+        model = Comment
+        fields = ["comment"]
+        widgets = {
+            "comment": forms.Textarea(attrs={
+                    "class": "form-control",
+                    "placeholder": "Enter your comments here",
+                    "style": "width: 400px; height: 300px;"
+                })
+        }
 
 
 
@@ -70,61 +85,62 @@ def index(request):
 
 
 def create_listing(request):
+
     if request.method == "POST":
         form = NewListingForm(request.POST)
         if form.is_valid():
             title = form.cleaned_data["title"]
             description = form.cleaned_data["description"]
             image_URL = form.cleaned_data["image_URL"]
-            starting_bid = form.cleaned_data["starting_bid"]
+            price = form.cleaned_data["price"]
             category = form.cleaned_data["category"]
             user = request.user
 
-            listing = Listing(title = title, description = description, image_URL = image_URL, starting_bid = starting_bid, owner = user, category = category)
+            listing = Listing(title = title, description = description, image_URL = image_URL, price = price, owner = user, category = category)
             listing.save()
 
             return HttpResponseRedirect(reverse(index))
         else:
             return render(request, "auctions/create_listing.html", {
                 "form": form,
-                # "categories": Listing.categories
             })
     else:
         return render(request, "auctions/create_listing.html", {
             "form": NewListingForm(),
-            # "categories": Listing.categories
         })
 
 
-def listing(request, listing_id):
+def listing_page(request, listing_id):
 
     listing = Listing.objects.get(pk=listing_id)
+    comments = Comment.objects.filter(listing=listing)
 
     if request.user.is_authenticated:
 
-        user = User.objects.get(pk=request.user.id)
+        user = request.user
+        watchlist_item = Watchlist.objects.filter(user=user, item=listing)
 
         if listing.active:
 
-            # highest_bid = Bid.objects.filter(listing=listing_id).order_by("price_bid").first()
+            highest_bid = Bid.objects.filter(listing=listing_id).order_by("-bid_price").first()
 
             if request.user.id == listing.owner.id:
-                return render(request, "auctions/control_listing.html", {
-                    "title": listing.title,
-                    # "price": highest_bid,
-                    "active": listing.active,
-                    "watchlist": listing.watchlist,
+                return render(request, "auctions/listing.html", {
+                    "listing": listing,
+                    "watchlist_item": watchlist_item,
+                    "bid_form": BiddingForm(),
+                    "comment_form": PlaceCommentForm(),
+                    "comments": comments
                 })
 
             else:
 
                 return render(request, "auctions/listing.html", {
-                    "title": listing.title,
-                    "active": listing.active,
-                    "image": listing.image_URL,
-                    "description": listing.description,
-                    # "price": highest_bid,
-                    "owner": listing.owner,
+                    "listing": listing,
+                    "watchlist_item": watchlist_item,
+                    "bid_form": BiddingForm(),
+                    "comment_form": PlaceCommentForm(),
+                    "comments": comments
                 })
 
         else:
@@ -135,54 +151,100 @@ def listing(request, listing_id):
                 })
 
             else:
-                return render(request, "auctions/closed_listing_user.html", {
-
-                })
+                    return render(request, "auctions/closed_listing_user.html", {
+                        "highest_bid": highest_bid,
+                    })
 
     else:
         return render(request, "auctions/listing.html", {
-            "title": listing.title,
-            "active": listing.active,
-            "image": listing.image_URL,
-            "description": listing.description,
-            # "price": highest_bid,
-            "owner": listing.owner,
+            "listing": listing
         })
 
 
-    # listing = Listing.objects.get(id=listing_id)
-    #
-    # if listing.active:
-    #
-    #     comments = Comment.objects.filter(listing=listing_id)
-    #
-    #     return render(request, "auctions/listing.html", {
-    #         "listing": listing
-    #     })
-    #     if request.user.is_authenticated:
-    #         watchlist_listing = Watchlist.objects.get(listing=listing_id, user=User.objects.get(pk=request.user.id))
-    #         if watchlist_listing is None:
-    #             listing_on_watchlist = False
-    #         else:
-    #             listing_on_watchlist = True
-    #     else:
-    #         listing_on_watchlist = False
-    #
-    #
-    # else:
-    #     pass
+def change_watch(request, listing_id):
+
+    listing = Listing.objects.get(pk=listing_id)
+    watchlist_item = Watchlist.objects.filter(user=request.user, item=listing)
+
+    if request.method == "POST":
+        if watchlist_item:
+            watchlist_item.delete()
+        else:
+            new_watchlist_item = Watchlist(user=User.objects.get(id=request.user.id), item=listing)
+            new_watchlist_item.save()
+
+        return listing_page(request, listing_id)
+
+
+def bid(request, listing_id):
+
+    listing = Listing.objects.get(pk=listing_id)
+
+    if request.method == "POST":
+        bid_form = BiddingForm(request.POST)
+        if bid_form.is_valid():
+            listing = listing
+            bidder = request.user
+            bid_price = float(bid_form.cleaned_data["bid_price"])
+
+            if bid_price <= 0:
+                return render(request, "auctions/errorpage.html", {
+                    "message": "Bid amount must be greater than €0."
+                })
+
+            highest_bid = Bid.objects.filter(listing=listing).order_by("-bid_price").first()
+            if highest_bid is None or bid_price > highest_bid.bid_price:
+                bid = Bid(listing = listing, bidder = bidder, bid_price = bid_price)
+                bid.save()
+                listing.price = bid_price
+                listing.save()
+
+                return HttpResponseRedirect(reverse(index))
+
+            else:
+                return render(request, "errorpage.html", {
+                    "message": "Your bid is not high enough."
+                })
+
+
+def close(request, listing_id):
+
+    listing = Listing.objects.get(pk=listing_id)
+
+    if request.method == "POST":
+
+        listing.active = False
+        listing.save()
+
+    return render(request, "auctions/listing.html", {
+        "listing": listing,
+        "watchlist_item": watchlist_item,
+        "bid_form": BiddingForm(),
+        "comment_form": PlaceCommentForm(),
+        "comments": comments
+    })
+
+
+def comment(request, listing_id):
+
+    listing = Listing.objects.get(pk=listing_id)
+
+    if request.method == "POST":
+        comment_form = PlaceCommentForm(request.POST)
+        if comment_form.is_valid():
+
+            content = comment_form.cleaned_data["comment"]
+
+            comment = Comment(listing= listing, commenter=User.objects.get(id=request.user.id), comment=content)
+            comment.save()
+
+    return listing(request, listing_id)
 
 
 def watchlist(request):
 
-    if request.method == "POST":
-
-        return render(request, "auctions/watchlist.html", {
-
-        })
-
-def categories(request):
     pass
+
 
 def login_view(request):
     if request.method == "POST":

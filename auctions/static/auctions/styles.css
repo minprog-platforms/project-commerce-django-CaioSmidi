@@ -8,6 +8,7 @@ body {
     border: 2px solid black;
     margin: 50px;
     padding: 20px;
+    background-color: #ddffdd;
 }
 
 .listing_title {
@@ -30,6 +31,7 @@ body {
 
 .listing_description {
     font-style: italic;
+    font-size: 14px;
 }
 
 .listing_image, .listing_title, .listing_price, .listing_description, .listing_owner {
@@ -47,12 +49,31 @@ body {
 }
 
 .auction_item {
-    margin: auto;
-    width: 60%;
+    margin-left: 22%;
+    margin-right: 30%;
+    width: 50%;
     border: 2px solid black;
     padding: 20px;
 }
 
-.submit_listing {
+.listing_container {
+    overflow: hidden;
+}
+
+.auction_bid {
+    float: left;
+}
+
+.auction_comment {
+    float: right;
+
+}
+
+.submit_listing, .submit_bidding, .submit_comment {
     margin-top: 20px;
+}
+
+.watch_form {
+    margin-left: auto;
+    margin-right: auto;
 }
