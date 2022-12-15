@@ -6,20 +6,22 @@
     {% for listing in active_listings %}
 
         <div class="listing_item">
+
             <a href="{% url 'listing' listing_id=listing.id %}">
+
+                <div class="listing_title">
+                    {{ listing.title }}
+                </div>
 
                 {% if listing.image_URL %}
                     <div class="listing_image">
                         <img src="{{ listing.image_URL }}" alt="Picture of {{ listing.title }}">
                     </div>
                 {% endif %}
-
-                <div class="listing_title">
-                    {{ listing.title }}
-                </div>
+            </a>
 
                 <div class="listing_price">
-                    {{ listing.starting_bid }}
+                    <div>Current price:</div>{{ listing.starting_bid }}
                 </div>
 
                 <div class="listing_description">
@@ -27,11 +29,8 @@
                 </div>
 
                 <div class="listing_owner">
-                    Listed by: {{ listing.owner }}
+                    <div>Listed by:</div>{{ listing.owner }}
                 </div>
-
-
-            </a>
         </div>
 
     {% empty %}

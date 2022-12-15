@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django import forms
 
-from .models import User, Listing, Bid, Comment
+from .models import User, Listing
 
 
 class NewListingForm(forms.ModelForm):
@@ -20,19 +20,20 @@ class NewListingForm(forms.ModelForm):
         model = Listing
         fields = ["title", "description", "starting_bid", "image_URL", "category"]
 
-class BiddingForm(forms.ModelForm):
+# class BiddingForm(forms.ModelForm):
+#
+#     class Meta:
+#         model = Bid
+#         fields = ["price_bid"]
+#
+#
+# class PlaceCommentForm(forms.ModelForm):
+#     pass
+#
+#     class Meta:
+#         model = Comment
+#         fields = ["listing", "commenter", "comment"]
 
-    class Meta:
-        model = Bid
-        fields = ["price_bid"]
-
-
-class PlaceCommentForm(forms.ModelForm):
-    pass
-
-    class Meta:
-        model = Comment
-        fields = ["listing", "commenter", "comment"]
 
 
 def index(request):
@@ -75,16 +76,20 @@ def listing(request, listing_id):
 
     listing = Listing.objects.get(pk=listing_id)
     user = User.objects.get(pk=request.user.id)
+    # watchlist = Listing.watchlist
 
     if request.user.is_authenticated:
 
         if listing.active:
 
-            highest_bid = Bid.objects.filter(listing=listing_id).order_by("price_bid").first()
+            # highest_bid = Bid.objects.filter(listing=listing_id).order_by("price_bid").first()
 
             if request.user.id == listing.owner.id:
                 return render(request, "auctions/control_listing.html", {
-                    "price": highest_bid
+                    "title": listing.title,
+                    # "price": highest_bid,
+                    "active": listing.active,
+                    "watchlist": listing.watchlist,
                 })
 
             else:
@@ -94,8 +99,8 @@ def listing(request, listing_id):
                     "active": listing.active,
                     "image": listing.image_URL,
                     "description": listing.description,
-                    "price": highest_bid,
-                    "owner": listing.owner
+                    # "price": highest_bid,
+                    "owner": listing.owner,
                 })
 
         else:
@@ -138,7 +143,9 @@ def listing(request, listing_id):
 
 
 def watchlist(request):
-    pass
+    return render(request, "auctions/watchlist.html", {
+
+    })
 
 def categories(request):
     pass

@@ -1,14 +1,28 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Your listing: {{ listing.title }}</h2>
+    <h2>Your listing: {{ title }}</h2>
 
-    {% if listing.active %}
-        This listing is active
-    {% endif %}
+    {% if active %}
 
-    {% if not listing.active %}
-        This listing is not active
+        {% if image %}
+            <div class="listing_image">
+                <img src="{{ image }}" alt="Photo of {{ title }}">
+            </div>
+
+        {% endif %}
+
+        {{ description }}
+
+        {% if price %}
+            <h3>Current price for item: </h3>{{ price }}
+        {% else %}
+            No biddings on this item yet!
+        {% endif %}
+
+        
+    {% else %}
+        <h2>This listing is not active</h2>
     {% endif %}
 
 {% endblock %}

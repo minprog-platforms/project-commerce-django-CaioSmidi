@@ -24,36 +24,34 @@ class Listing(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="seller")
     active = models.BooleanField(default=True)
     category = models.CharField(max_length=64, choices=categories, default="TENN")
-    watchlist = models.ManyToManyField(User, blank=True, related_name="watchlist_item")
 
     def __str__(self):
         return f"Listing {self.id}: {self.title}, sold by {self.owner}"
 
 
-class Bid(models.Model):
-    listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
-    bidder = models.ForeignKey(User, on_delete=models.CASCADE)
-    price_bid = models.DecimalField(max_digits=64, decimal_places=2)
-
-
-    def __str__(self):
-        return f"{self.bidder} bid on {self.listing} for €{self.price_bid}"
-
-
-class Comment(models.Model):
-    listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
-    commenter = models.ForeignKey(User, on_delete=models.CASCADE)
-    comment = models.TextField(blank=False)
-
-
-    def __str__(self):
-        return f"Comment {self.id} on listing {self.listing} written by {self.text}"
-
-
+# class Bid(models.Model):
+#     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
+#     bidder = models.ForeignKey(User, on_delete=models.CASCADE)
+#     price_bid = models.DecimalField(max_digits=64, decimal_places=2)
+#
+#
+#     def __str__(self):
+#         return f"{self.bidder} bid on {self.listing} for €{self.price_bid}"
+#
+#
+# class Comment(models.Model):
+#     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
+#     commenter = models.ForeignKey(User, on_delete=models.CASCADE)
+#     comment = models.TextField(blank=False)
+#
+#
+#     def __str__(self):
+#         return f"Comment {self.id} on listing {self.listing} written by {self.text}"
+#
+#
 # class Watchlist(models.Model):
 #     user = models.ForeignKey(User, on_delete=models.CASCADE)
 #     item = models.ForeignKey(Listing, on_delete=models.CASCADE)
-#
 #
 #
 #     def __str__(self):

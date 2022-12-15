@@ -4,24 +4,39 @@
     <h2>{{ title }}</h2>
 
     {% if active %}
+        <div class="auction_item">
+            {% if image %}
+                <div class="listing_image">
+                    <img src="{{ image }}" alt="Photo of {{ title }}">
+                </div>
 
-        {% if image %}
-            <div class="listing_image">
-                <img src="{{ image }}" alt="Photo of {{ title }}">
-            </div>
+            {% endif %}
 
-        {% endif %}
+            {{ description }}
 
-        {{ description }}
+            <!-- {% if price %}
+                <h3>Current price for item: </h3>{{ price }}
+            {% else %}
+                No biddings on this item yet!
+            {% endif %} -->
 
-        {% if price %}
-            {{ price }}
-        {% else %}
-            No biddings on this item yet!
-        {% endif %}
+            Sold by: {{ owner }}
 
-        Sold by: {{ owner }}
+            {% if watchlist %}
+                <form class="" action="" method="post">
+                    {% csrf_token %}
+                    {{ rm_form }}
+                    <input type="submit" name="" value="Remove from Watchlist">
+                </form>
+            {% else %}
+                <form class="" action="" method="post">
+                    {% csrf_token %}
+                    {{ add_form }}
+                    <input type="submit" name="" value="Add to Watchlist">
+                </form>
 
+            {% endif %}
+        </div>
 
     {% else %}
         This listing is not active anymore.

@@ -3,34 +3,54 @@ body {
 }
 
 .listing_item {
+    width: 40%;
     color: black;
-}
-
-.listing_image {
-    height: 100px;
-    background-color: blue;
-    align-items: center;
-}
-
-.listing_image img {
-    height: 100px;
-    width: auto%;
-    background-color: blue;
+    border: 2px solid black;
+    margin: 50px;
+    padding: 20px;
 }
 
 .listing_title {
-
+    font-size: 20px;
+    font-weight: bold;
 }
 
-.listing_price {
-
+.listing_image {
+    height: 300px;
 }
 
-.listing_description {
-
+.listing_image img {
+    height: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    display: block;
 }
 
-.create_listing {
+.listing_image, .listing_title, .listing_price, .listing_description, .listing_owner {
+    border: 1px groove red;
+    border-radius: 10px;
+    font-family: sans-serif;
+    padding: 5px;
+    margin: 5px;
+    color: black;
+    text-decoration: inherit;
+}
+
+.listing_owner div, .listing_price div {
+    font-weight: bold;
+}
+
+.auction_item {
+    margin: auto;
+    width: 60%;
+    border: 2px solid black;
+    padding: 20px;
+}
+
+
+/* .create_listing {
     padding-top: 30px;
     padding-left: 15px;
 }
@@ -47,4 +67,4 @@ body {
 .category_options {
     margin-top: 20px    ;
     margin-bottom: 10px;
-}
+} */
