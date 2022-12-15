@@ -28,6 +28,13 @@ class Listing(models.Model):
     def __str__(self):
         return f"Listing {self.id}: {self.title}, sold by {self.owner}"
 
+class Watchlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    item = models.ForeignKey(Listing, on_delete=models.CASCADE)
+
+
+    def __str__(self):
+        return f"{self.item} on Watchlist of {self.user}"
 
 # class Bid(models.Model):
 #     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
@@ -49,10 +56,3 @@ class Listing(models.Model):
 #         return f"Comment {self.id} on listing {self.listing} written by {self.text}"
 #
 #
-# class Watchlist(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     item = models.ForeignKey(Listing, on_delete=models.CASCADE)
-#
-#
-#     def __str__(self):
-#         return f"{self.item} on Watchlist of {self.user}"

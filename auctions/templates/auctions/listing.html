@@ -22,19 +22,20 @@
 
             Sold by: {{ owner }}
 
-            {% if watchlist %}
-                <form class="" action="" method="post">
-                    {% csrf_token %}
-                    {{ rm_form }}
-                    <input type="submit" name="" value="Remove from Watchlist">
-                </form>
-            {% else %}
-                <form class="" action="" method="post">
-                    {% csrf_token %}
-                    {{ add_form }}
-                    <input type="submit" name="" value="Add to Watchlist">
-                </form>
-
+            {% if user.is_authenticated %}
+                {% if watchlist %}
+                    <form class="" action="" method="post">
+                        {% csrf_token %}
+                        {{ rm_form }}
+                        <input type="submit" name="" value="Remove from Watchlist">
+                    </form>
+                {% else %}
+                    <form class="" action="" method="post">
+                        {% csrf_token %}
+                        {{ add_form }}
+                        <input type="submit" name="" value="Add to Watchlist">
+                    </form>
+                {% endif %}
             {% endif %}
         </div>
 

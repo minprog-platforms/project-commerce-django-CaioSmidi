@@ -5,20 +5,44 @@ from django.shortcuts import render
 from django.urls import reverse
 from django import forms
 
-from .models import User, Listing
+
+from .models import User, Listing, Watchlist
 
 
 class NewListingForm(forms.ModelForm):
 
-    title = forms.CharField(max_length=64)
-    description = forms.CharField(max_length=128)
-    starting_bid = forms.DecimalField(max_digits=64, decimal_places=2)
-    image_URL = forms.URLField(required=False)
-    category = forms.ChoiceField(required=False, choices=Listing.categories)
+    # title = forms.CharField(max_length=64)
+    # description = forms.CharField(max_length=128)
+    # image_URL = forms.URLField(required=False)
+    # starting_bid = forms.DecimalField(max_digits=64, decimal_places=2)
+    # category = forms.ChoiceField(required=False, choices=Listing.categories)
 
     class Meta:
         model = Listing
-        fields = ["title", "description", "starting_bid", "image_URL", "category"]
+        fields = ["title", "description", "image_URL", "starting_bid", "category"]
+        widgets = {
+            "title": forms.TextInput(attrs={
+                    "class": "form-control",
+                    "placeholder": "Title"
+                }),
+            "description": forms.Textarea(attrs={
+                    "class": "form-control",
+                    "placeholder": "Place your item description here"
+                }),
+            "image_URL": forms.URLInput(attrs={
+                    "class": "form-control",
+                    "placeholder": "Place the URL of your image here"
+                }),
+            "starting_bid": forms.NumberInput(attrs={
+                    "class": "form-control",
+                    "placeholder": "Place your starting price here (in €)"
+                }),
+            "category": forms.Select(attrs={
+                    "class": "form-control",
+                    "placeholder": "Pick your category"
+                }),
+
+        }
 
 # class BiddingForm(forms.ModelForm):
 #
@@ -51,34 +75,34 @@ def create_listing(request):
         if form.is_valid():
             title = form.cleaned_data["title"]
             description = form.cleaned_data["description"]
-            starting_bid = form.cleaned_data["starting_bid"]
             image_URL = form.cleaned_data["image_URL"]
+            starting_bid = form.cleaned_data["starting_bid"]
             category = form.cleaned_data["category"]
             user = request.user
 
-            listing = Listing(title = title, description = description, image_URL = image_URL, starting_bid = starting_bid, category = category, owner = user)
+            listing = Listing(title = title, description = description, image_URL = image_URL, starting_bid = starting_bid, owner = user, category = category)
             listing.save()
 
             return HttpResponseRedirect(reverse(index))
         else:
             return render(request, "auctions/create_listing.html", {
                 "form": form,
-                "categories": Listing.categories
+                # "categories": Listing.categories
             })
     else:
         return render(request, "auctions/create_listing.html", {
             "form": NewListingForm(),
-            "categories": Listing.categories
+            # "categories": Listing.categories
         })
 
 
 def listing(request, listing_id):
 
     listing = Listing.objects.get(pk=listing_id)
-    user = User.objects.get(pk=request.user.id)
-    # watchlist = Listing.watchlist
 
     if request.user.is_authenticated:
+
+        user = User.objects.get(pk=request.user.id)
 
         if listing.active:
 
@@ -116,7 +140,14 @@ def listing(request, listing_id):
                 })
 
     else:
-        pass
+        return render(request, "auctions/listing.html", {
+            "title": listing.title,
+            "active": listing.active,
+            "image": listing.image_URL,
+            "description": listing.description,
+            # "price": highest_bid,
+            "owner": listing.owner,
+        })
 
 
     # listing = Listing.objects.get(id=listing_id)
@@ -143,9 +174,12 @@ def listing(request, listing_id):
 
 
 def watchlist(request):
-    return render(request, "auctions/watchlist.html", {
 
-    })
+    if request.method == "POST":
+
+        return render(request, "auctions/watchlist.html", {
+
+        })
 
 def categories(request):
     pass

@@ -28,6 +28,10 @@ body {
     display: block;
 }
 
+.listing_description {
+    font-style: italic;
+}
+
 .listing_image, .listing_title, .listing_price, .listing_description, .listing_owner {
     border: 1px groove red;
     border-radius: 10px;
@@ -49,22 +53,6 @@ body {
     padding: 20px;
 }
 
-
-/* .create_listing {
-    padding-top: 30px;
-    padding-left: 15px;
-}
-
 .submit_listing {
-    margin-top: 150px;
-    margin-left: 150px;
+    margin-top: 20px;
 }
-
-.create_listing_form {
-    padding-right: 10px;
-}
-
-.category_options {
-    margin-top: 20px    ;
-    margin-bottom: 10px;
-} */
