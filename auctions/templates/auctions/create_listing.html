@@ -1,7 +1,9 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Create Listing</h2>
+    <div class="header">
+        <h2>Create Listing</h2>
+    </div>
 
     <div class="create_listing">
         <form action="{% url 'create_listing' %}" method="post">

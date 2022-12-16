@@ -1,5 +1,22 @@
 body {
     padding: 10px;
+    background-color: #ddccdd;
+}
+
+.header {
+    margin: auto;
+    max-width: 30%;
+    text-align: center;
+    border: 2px solid black;
+    border-radius: 10px;
+    border-color: green;
+    margin-bottom: 15px;
+}
+
+.container {
+    background-color: #eeeeee;
+    border: 5px solid #dddddd;
+    border-radius: 50px;
 }
 
 .listing_item {
@@ -18,6 +35,12 @@ body {
 
 .listing_image {
     height: 300px;
+    display: flex;
+    justify-content: center;
+}
+
+.image_center {
+
 }
 
 .listing_image img {
@@ -76,4 +99,9 @@ body {
 .watch_form {
     margin-left: auto;
     margin-right: auto;
+}
+
+.closed_listing {
+    margin-left: 40%;
+    width: 40%;
 }

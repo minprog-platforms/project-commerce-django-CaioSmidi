@@ -17,23 +17,28 @@ class NewListingForm(forms.ModelForm):
         widgets = {
             "title": forms.TextInput(attrs={
                     "class": "form-control",
-                    "placeholder": "Title"
+                    "placeholder": "Title",
+                    "style": "width: 200px; margin-bottom: 20px; border-color: black;"
                 }),
             "description": forms.Textarea(attrs={
                     "class": "form-control",
-                    "placeholder": "Place your item description here"
+                    "placeholder": "Place your item description here",
+                    "style": "margin-bottom: 20px; border-color: black;"
                 }),
             "image_URL": forms.URLInput(attrs={
                     "class": "form-control",
-                    "placeholder": "Place the URL of your image here"
+                    "placeholder": "Place the URL of your image here",
+                    "style": "width: 400px; margin-bottom: 20px; border-color: black;"
                 }),
             "price": forms.NumberInput(attrs={
                     "class": "form-control",
-                    "placeholder": "Place your starting price here (in €)"
+                    "placeholder": "Price (in €)",
+                    "style": "width: 150px; margin-bottom: 20px; border-color: black;"
                 }),
             "category": forms.Select(attrs={
                     "class": "form-control",
-                    "placeholder": "Pick your category"
+                    "placeholder": "Select category",
+                    "style": "width: 150px; margin-bottom: 20px; border-color: black;"
                 }),
             }
 
@@ -216,12 +221,8 @@ def close(request, listing_id):
         listing.active = False
         listing.save()
 
-    return render(request, "auctions/listing.html", {
+    return render(request, "auctions/closed_listing_seller.html", {
         "listing": listing,
-        "watchlist_item": watchlist_item,
-        "bid_form": BiddingForm(),
-        "comment_form": PlaceCommentForm(),
-        "comments": comments
     })
 
 
