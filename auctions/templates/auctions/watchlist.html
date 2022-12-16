@@ -1,42 +1,52 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Your Watchlist</h2>
+    <div class="header">
+        <h2>Watchlist</h2>
+    </div>
 
-    {% for item in watchlist %}
+    {% if watchlist %}
+    <div class="container">
+    {% for listing in watchlist %}
 
         <div class="listing_item">
-            <a href="{% url 'listing' listing_id=listing.id %}">
 
-                {% if item.image_URL %}
-                    <div class="listing_image">
-                        <img src="{{ item.image_URL }}" alt="Picture of {{ item.title }}">
-                    </div>
-                {% endif %}
+            <a href="{% url 'listing' listing_id=listing.item.id %}">
 
                 <div class="listing_title">
-                    {{ item.title }}
+                    {{ listing.item.title }}
+                </div>
+
+                {% if listing.item.image_URL %}
+                    <div class="listing_image">
+                        <img src="{{ listing.item.image_URL }}" alt="Picture of {{ listing.item.title }}">
+                    </div>
+                {% else %}
+                    <div class="listing_image">
+                        <img class="image_center" src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930" alt="No image available">
+                    </div>
+                {% endif %}
+            </a>
+
+                <div class="listing_description">
+                    "{{ listing.item.description }}"
                 </div>
 
                 <div class="listing_price">
-                    {{ item.starting_bid }}
-                </div>
-
-                <div class="listing_description">
-                    {{ item.description }}
+                    <div>Current price:</div>€ {{ listing.item.price }}
                 </div>
 
                 <div class="listing_owner">
-                    Listed by: {{ item.owner }}
+                    <div>Listed by:</div>{{ listing.item.owner }}
                 </div>
-
-
-            </a>
         </div>
 
-    {% empty %}
-        <br><br>
-        <h3>No items on your watchlist..</h3>
-    {% endfor %}
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="no_listings">
+        <h3>Your Watchlist is empty..</h3>
+    </div>
+    {% endif %}
 
 {% endblock %}

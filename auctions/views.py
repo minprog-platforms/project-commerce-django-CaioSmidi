@@ -14,6 +14,9 @@ class NewListingForm(forms.ModelForm):
     class Meta:
         model = Listing
         fields = ["title", "description", "image_URL", "price", "category"]
+        labels = {
+            "category": "Select category:"
+        }
         widgets = {
             "title": forms.TextInput(attrs={
                     "class": "form-control",
@@ -48,6 +51,9 @@ class BiddingForm(forms.ModelForm):
     class Meta:
         model = Bid
         fields = ["bid_price"]
+        labels = {
+            "bid_price":""
+        }
         widgets = {
             "bid_price": forms.NumberInput(attrs={
                     "class": "form-control",
@@ -63,7 +69,7 @@ class PlaceCommentForm(forms.ModelForm):
         model = Comment
         fields = ["comment"]
         labels = {
-            "comment": "Place a comment:"
+            "comment": ""
         }
         widgets = {
             "comment": forms.Textarea(attrs={
@@ -118,16 +124,16 @@ def listing_page(request, listing_id):
 
         user = request.user
         watchlist_item = Watchlist.objects.filter(user=user, item=listing)
+        highest_bid = Bid.objects.filter(listing=listing_id).order_by("-bid_price").first()
 
         if listing.active:
-
-            highest_bid = Bid.objects.filter(listing=listing_id).order_by("-bid_price").first()
 
             if request.user.id == listing.owner.id:
                 return render(request, "auctions/listing.html", {
                     "listing": listing,
                     "watchlist_item": watchlist_item,
                     "bid_form": BiddingForm(),
+                    "highest_bid": highest_bid,
                     "comment_form": PlaceCommentForm(),
                     "comments": comments
                 })
@@ -138,6 +144,7 @@ def listing_page(request, listing_id):
                     "listing": listing,
                     "watchlist_item": watchlist_item,
                     "bid_form": BiddingForm(),
+                    "highest_bid": highest_bid,
                     "comment_form": PlaceCommentForm(),
                     "comments": comments
                 })
@@ -145,18 +152,26 @@ def listing_page(request, listing_id):
         else:
 
             if request.user.id == listing.owner.id:
-                return render(request, "auctions/closed_listing_seller.html", {
-
+                return render(request, "auctions/listing.html", {
+                    "listing": listing,
+                    "watchlist_item": watchlist_item,
+                    "highest_bid": highest_bid,
+                    "comment_form": PlaceCommentForm(),
+                    "comments": comments
                 })
 
             else:
-                    return render(request, "auctions/closed_listing_user.html", {
-                        "highest_bid": highest_bid,
-                    })
+                return render(request, "auctions/listing.html", {
+                    "listing": listing,
+                    "watchlist_item": watchlist_item,
+                    "highest_bid": highest_bid,
+                    "comment_form": PlaceCommentForm(),
+                    "comments": comments
+                })
 
     else:
         return render(request, "auctions/listing.html", {
-            "listing": listing
+            "listing": listing,
         })
 
 
@@ -174,6 +189,9 @@ def change_watch(request, listing_id):
 
         return listing_page(request, listing_id)
 
+    else:
+        return listing_page(request, listing_id)
+
 
 def bid(request, listing_id):
 
@@ -188,7 +206,7 @@ def bid(request, listing_id):
 
             if bid_price <= 0:
                 return render(request, "auctions/errorpage.html", {
-                    "message": "Your bid must be higher than € 0."
+                    "message": "Your bid must be higher than € 0.",
                 })
 
             highest_bid = Bid.objects.filter(listing=listing).order_by("-bid_price").first()
@@ -202,8 +220,11 @@ def bid(request, listing_id):
                     return HttpResponseRedirect(reverse(index))
 
             return render(request, "auctions/errorpage.html", {
-                "message": "Your bid must be higher than the current price."
+                "message": "Your bid must be higher than the current price.",
             })
+
+    else:
+        return listing_page(request, listing_id)
 
 
 def close(request, listing_id):
@@ -215,9 +236,10 @@ def close(request, listing_id):
         listing.active = False
         listing.save()
 
-    return render(request, "auctions/closed_listing_seller.html", {
-        "listing": listing,
-    })
+        return listing_page(request, listing_id)
+
+    else:
+        return listing_page(request, listing_id)
 
 
 def comment(request, listing_id):
@@ -235,16 +257,17 @@ def comment(request, listing_id):
 
         return listing_page(request, listing_id)
 
-    # else:
-    #     return render(request, "auctions/errorpage.html", {
-    #         "message": "Not possible"
-    #     })
-
+    else:
+        return listing_page(request, listing_id)
 
 
 def watchlist(request):
 
-    pass
+    watchlist = Watchlist.objects.filter(user=request.user)
+
+    return render(request, "auctions/watchlist.html", {
+        "watchlist": watchlist,
+    })
 
 
 def login_view(request):

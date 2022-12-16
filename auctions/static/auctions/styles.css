@@ -18,14 +18,12 @@ body {
     border: 5px solid #dddddd;
     border-radius: 50px;
     height: 80%;
-    /* width: 80%; */
     display: grid;
     grid-template-columns: 50% 50%;
     gap: 10px 20px;
 }
 
 .listing_item {
-    /* width: 40%; */
     display: grid;
     grid-template-colums: 50% 50%;
     color: black;
@@ -77,14 +75,13 @@ body {
 
 
 .close_form {
-    /* margin: 100px; */
     margin-top: 10%;
     margin-bottom: auto;
     float: left;
 }
 
 .auction_image {
-    height: 300px;
+    height: 200px;
     display: flex;
     justify-content: center;
     border: 3px groove #aaaaaa;
@@ -92,28 +89,43 @@ body {
     grid-area: a;
     padding: 5px;
     margin: 5px;
+    margin-right: 20px
 }
+
 
 .auction_description {
     grid-area: b;
+    font-style: italic;
+    margin-top: 20px;
+    text-align: center;
 }
 
 .auction_price {
     grid-area: c;
+    font-weight: bold;
+    text-align: center;
+    font-size: 24px;
 }
 
 .auction_owner {
     grid-area: d;
+    border: 2px dashed black;
+    border-radius: 20px;
+    text-align: center;
+    line-height: 100px;
 }
 
 .auction_item {
     margin-left: 22%;
     margin-right: 30%;
     width: 50%;
-    border: 2px solid black;
-    padding: 20px;
+    border: 4px solid black;
+    border-radius: 40px;
     display: grid;
     grid-template-areas: 'a b' 'a c' 'a d';
+    /* margin: 50px; */
+    padding: 20px;
+    background-color: #ddffdd;
 }
 
 .listing_container {
@@ -157,6 +169,18 @@ body {
 .closed_listing {
     margin-left: 40%;
     width: 40%;
+}
+
+.closed_message {
+    margin-top: 10%;
+    margin-bottom: auto;
+    float: left;
+    padding: 5px;
+    border: 4px solid red;
+}
+
+.no_listings {
+    margin-top: 50px;
 }
 
 .error_header {

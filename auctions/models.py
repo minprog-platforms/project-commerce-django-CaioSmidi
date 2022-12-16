@@ -6,13 +6,6 @@ class User(AbstractUser):
     pass
 
 
-# class Category(models.Model):
-#     category = models.CharField(max_length=64)
-#
-#     def __str__(self):
-#         return f"{self.category}"
-
-
 class Listing(models.Model):
 
     categories = [("TENN", "Tennis"), ("FOOT", "Football"), ("BASE", "Baseball"), ("BASK", "Basketball"), ("HOCK", "Hockey"), ("OTHER", "Other Sports")]
@@ -26,7 +19,8 @@ class Listing(models.Model):
     category = models.CharField(max_length=64, choices=categories, default="TENN")
 
     def __str__(self):
-        return f"Listing {self.id}: {self.title}, sold by {self.owner}"
+        return f"Listing {self.id}: {self.title}, listed by {self.owner}"
+
 
 class Watchlist(models.Model):
 
@@ -37,6 +31,7 @@ class Watchlist(models.Model):
     def __str__(self):
         return f"{self.item} on Watchlist of {self.user}"
 
+
 class Bid(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
     bidder = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -44,7 +39,7 @@ class Bid(models.Model):
 
 
     def __str__(self):
-        return f"{self.bidder} bid on {self.listing} for €{self.bid_price}"
+        return f"\"{self.bidder}\" bid on \"{self.listing}\" for €{self.bid_price}"
 
 
 class Comment(models.Model):
@@ -54,4 +49,4 @@ class Comment(models.Model):
 
 
     def __str__(self):
-        return f"Comment: \"{self.comment}\" on listing {self.listing} written by {self.commenter}"
+        return f"Comment: \"{self.comment}\" on listing \"{self.listing}\" written by \"{self.commenter}\""

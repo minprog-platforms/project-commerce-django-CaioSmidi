@@ -2,11 +2,9 @@
 
 {% block body %}
 
-    {% if listing.active %}
-
         <div class="listing_container">
 
-            {% if listing.owner == user %}
+            {% if listing.owner == user and listing.active %}
             <div class="close_form">
                 <form class="" action="{% url 'close' listing.id %}" method="POST">
                     {% csrf_token %}
@@ -15,7 +13,7 @@
                     {% endif %}
                 </form>
             </div>
-            {% elif user.is_authenticated %}
+            {% elif user.is_authenticated and listing.active%}
             <div class="auction_bid">
                 <form action="{% url 'bid' listing.id %}" method="post">
                     {% csrf_token %}
@@ -26,6 +24,22 @@
                         <input type="submit" class="btn btn-primary" name="submit_bidding" value="Place your bid">
                     </div>
                 </form>
+            </div>
+            {% elif not listing.active and listing.owner == user %}
+            <div class="closed_message">
+                <h5>You have closed this listing.</h5><br>
+            {% if highest_bid %}
+                <h6>You have sold this item to {{ highest_bid.bidder }} for € {{ highest_bid.bid_price }}!</h6>
+            {% endif %}
+            </div>
+            {% elif not listing.active and highest_bid.bidder == user %}
+            <div class="closed_message">
+                <h5>You have won this listing!</h5>
+                <h6>You have bought this item for {{ highest_bid.bid_price }}!</h6>
+            </div>
+            {% elif not listing.active %}
+            <div class="closed_message">
+                <h6>This listing is closed, bidding is not possible.</h6>
             </div>
             {% endif %}
 
@@ -80,20 +94,16 @@
                     </div>
                 {% endif %}
                 <div class="auction_description">
-                    {{ listing.description }}
+                    "{{ listing.description }}"
                 </div>
                 <div class="auction_price">
-                    Price: €{{ listing.price }}
+                    Current price: € {{ listing.price }}
                 </div>
                 <div class="auction_owner">
-                    Sold by: {{ listing.owner }}
+                    Listed by: {{ listing.owner }}
                 </div>
             </div>
 
         </div>
-    {% else %}
-        This listing is not active anymore.
-    {% endif %}
-
 
 {% endblock %}
