@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -89,6 +90,7 @@ def index(request):
     })
 
 
+@login_required
 def create_listing(request):
 
     if request.method == "POST":
@@ -175,6 +177,7 @@ def listing_page(request, listing_id):
         })
 
 
+@login_required
 def change_watch(request, listing_id):
 
     listing = Listing.objects.get(pk=listing_id)
@@ -193,6 +196,7 @@ def change_watch(request, listing_id):
         return listing_page(request, listing_id)
 
 
+@login_required
 def bid(request, listing_id):
 
     listing = Listing.objects.get(pk=listing_id)
@@ -227,6 +231,7 @@ def bid(request, listing_id):
         return listing_page(request, listing_id)
 
 
+@login_required
 def close(request, listing_id):
 
     listing = Listing.objects.get(pk=listing_id)
@@ -242,6 +247,7 @@ def close(request, listing_id):
         return listing_page(request, listing_id)
 
 
+@login_required
 def comment(request, listing_id):
 
     listing = Listing.objects.get(pk=listing_id)
@@ -261,6 +267,7 @@ def comment(request, listing_id):
         return listing_page(request, listing_id)
 
 
+@login_required
 def watchlist(request):
 
     watchlist = Watchlist.objects.filter(user=request.user)
