@@ -11,7 +11,7 @@
                 <form class="" action="{% url 'close' listing.id %}" method="POST">
                     {% csrf_token %}
                     {% if listing.active %}
-                        <input type="submit" name="" value="Close this listing">
+                        <input type="submit" class="btn btn-primary" name="" value="Close this listing">
                     {% endif %}
                 </form>
             </div>
@@ -23,7 +23,7 @@
                         {{ bid_form }}
                     </div>
                     <div class="submit_bidding">
-                        <input type="submit" name="submit_bidding" value="Place your bid">
+                        <input type="submit" class="btn btn-primary" name="submit_bidding" value="Place your bid">
                     </div>
                 </form>
             </div>
@@ -36,44 +36,58 @@
                     <div class="comment_form">
                         {{ comment_form }}
                     </div>
-                        <div class="submit_comment">
-                        <input type="submit" name="submit_comment" value="Place your comment">
+                    <div class="submit_comment">
+                        <input type="submit" class="btn btn-secondary" name="submit_comment" value="Place your comment">
                     </div>
                 </form>
                 {% if comments %}
-                    {{ comments }}
+                <br><br><h4>All comments on this item:</h4>
+                <div class="comments">
+                    {% for comment in comments %}
+                    <div class="comment">
+                        <div style="font-style:italic;"> {{ comment.commenter }} commented:</div>
+                        <div style="font-size: 18px; font-weight:bold;"> "{{ comment.comment }}" </div>
+                    </div>
+                    {% endfor %}
+                </div>
                 {% endif %}
             </div>
             {% endif %}
 
-            <div class="auction_item">
-                {% if user.is_authenticated %}
-                    <div class="watch_form">
-                        <form class="" action="{% url 'change_watch' listing.id %}" method="POST">
-                            {% csrf_token %}
-                            {% if watchlist_item %}
-                                <input type="submit" name="" value="Remove from Watchlist">
-                            {% else %}
-                                <input type="submit" name="" value="Add to Watchlist">
-                            {% endif %}
-                        </form>
-                    </div>
-                {% endif %}
+            <div class="header">
                 <h2>{{ listing.title }}</h2>
+            </div>
+            {% if user.is_authenticated %}
+                <div class="watch_form">
+                    <form class="" action="{% url 'change_watch' listing.id %}" method="POST">
+                        {% csrf_token %}
+                        {% if watchlist_item %}
+                            <input type="submit" class="btn btn-danger" name="" value="Remove from Watchlist">
+                        {% else %}
+                            <input type="submit" class="btn btn-success" name="" value="Add to Watchlist">
+                        {% endif %}
+                    </form>
+                </div>
+            {% endif %}
+            <div class="auction_item">
                 {% if listing.image_URL %}
-                    <div class="listing_image">
+                    <div class="auction_image">
                         <img src="{{ listing.image_URL }}" alt="Photo of {{ listing.title }}">
                     </div>
                 {% else %}
-                    <div class="listing_image">
+                    <div class="auction_image">
                         <img class="image_center" src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930" alt="No image available">
                     </div>
                 {% endif %}
-                {{ listing.description }}
-
-                Price: €{{ listing.price }}
-
-                Sold by: {{ listing.owner }}
+                <div class="auction_description">
+                    {{ listing.description }}
+                </div>
+                <div class="auction_price">
+                    Price: €{{ listing.price }}
+                </div>
+                <div class="auction_owner">
+                    Sold by: {{ listing.owner }}
+                </div>
             </div>
 
         </div>

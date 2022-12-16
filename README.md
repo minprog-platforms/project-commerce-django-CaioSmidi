@@ -18,14 +18,14 @@ you to the specified page, as explained in the sketch itself. Also notice that
 these navigation buttons are visible and accessible on all pages in this application,
 as also emphasized in the sketch.
 A sketch of the Active Listings Page is provided below:
-![]()
+!["Sketch of Active Listings Page"](images/202212160955371000.jpg)
 
 Another important page is the Create Listing Page. Here a signed in user can create
 their own listing by filling in the form fields (image and category are optional)
 and submitting the form. When the form is filled in validly the newly created
 listing can be found on the Active Listings Page.
 A sketch of the Create Listing Page is provided below:
-![]()
+!["Sketch of Create Listing Page"](images/commerce_design_0.jpg)
 
 
 Clicking on any specific listing on the Active Listings Page will take the user
@@ -41,14 +41,14 @@ Lastly, if the user happens to be the owner of the listing, they have an option
 to close the listing, which will cause the listing to be removed from the Active
 Listings Page.
 A sketch of the Listing Page is provided below:
-![]()
+!["Sketch of Listing Page"](images/202212160957001001.jpg)
 
 
 Lastly, I have added a small sketch of the Django Admin Interface Page. Here, the
 admin/superuser can manually create/add/delete instances of classes within the
 dataset, as shown in the SQL lecture.
 A sketch of the Django Admin Interface Page is provided below:
-![]()
+!["Sketch of Django Admin Interface Page"](images/202212160957401002.jpg)
 
 
 For the Watchlist page and Categories page I have not drawn separate sketches,
@@ -61,7 +61,7 @@ to implement this application. It is clear to see that the classes User and
 Listing are connected to basically all other classes, and will be therefore the
 most essential in our dataset.
 My sketch of the Class Diagram used for this application is provided below:
-![]()
+!["Sketch of Class Diagram"](images/202212160958381003.jpg)
 
 
 * Lastly we will look at which pages will be using what information from the

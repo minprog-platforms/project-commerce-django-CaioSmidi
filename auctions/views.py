@@ -18,29 +18,30 @@ class NewListingForm(forms.ModelForm):
             "title": forms.TextInput(attrs={
                     "class": "form-control",
                     "placeholder": "Title",
-                    "style": "width: 200px; margin-bottom: 20px; border-color: black;"
+                    "style": "width: 200px; margin-bottom: 20px; border: 2px solid black;"
                 }),
             "description": forms.Textarea(attrs={
                     "class": "form-control",
                     "placeholder": "Place your item description here",
-                    "style": "margin-bottom: 20px; border-color: black;"
+                    "style": "margin-bottom: 20px; border: 2px solid black;"
                 }),
             "image_URL": forms.URLInput(attrs={
                     "class": "form-control",
                     "placeholder": "Place the URL of your image here",
-                    "style": "width: 400px; margin-bottom: 20px; border-color: black;"
+                    "style": "width: 400px; margin-bottom: 20px; border: 2px solid black;"
                 }),
             "price": forms.NumberInput(attrs={
                     "class": "form-control",
                     "placeholder": "Price (in €)",
-                    "style": "width: 150px; margin-bottom: 20px; border-color: black;"
+                    "style": "width: 150px; margin-bottom: 20px; border: 2px solid black;"
                 }),
             "category": forms.Select(attrs={
                     "class": "form-control",
                     "placeholder": "Select category",
-                    "style": "width: 150px; margin-bottom: 20px; border-color: black;"
+                    "style": "width: 150px; margin-bottom: 20px; border: 2px solid black;"
                 }),
             }
+
 
 class BiddingForm(forms.ModelForm):
 
@@ -51,18 +52,9 @@ class BiddingForm(forms.ModelForm):
             "bid_price": forms.NumberInput(attrs={
                     "class": "form-control",
                     "placeholder": "Place the amount of your bid",
-                    "style": "width: 300px;"
+                    "style": "width: 300px; border: 2px solid black;"
                 })
         }
-
-# class WatchlistForm(forms.ModelForm):
-#
-#     class Meta:
-#         model = Watchlist
-#         fields = ["watchlist"]
-#         widgets = {
-#             "watchlist": forms.Selec
-#         }
 
 
 class PlaceCommentForm(forms.ModelForm):
@@ -70,14 +62,16 @@ class PlaceCommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ["comment"]
+        labels = {
+            "comment": "Place a comment:"
+        }
         widgets = {
             "comment": forms.Textarea(attrs={
                     "class": "form-control",
-                    "placeholder": "Enter your comments here",
-                    "style": "width: 400px; height: 300px;"
+                    "placeholder": "Enter your comment here",
+                    "style": "width: 400px; height: 150px; border: 2px solid black;"
                 })
         }
-
 
 
 def index(request):
@@ -194,22 +188,22 @@ def bid(request, listing_id):
 
             if bid_price <= 0:
                 return render(request, "auctions/errorpage.html", {
-                    "message": "Bid amount must be greater than €0."
+                    "message": "Your bid must be higher than € 0."
                 })
 
             highest_bid = Bid.objects.filter(listing=listing).order_by("-bid_price").first()
             if highest_bid is None or bid_price > highest_bid.bid_price:
-                bid = Bid(listing = listing, bidder = bidder, bid_price = bid_price)
-                bid.save()
-                listing.price = bid_price
-                listing.save()
+                if bid_price > listing.price:
+                    bid = Bid(listing = listing, bidder = bidder, bid_price = bid_price)
+                    bid.save()
+                    listing.price = bid_price
+                    listing.save()
 
-                return HttpResponseRedirect(reverse(index))
+                    return HttpResponseRedirect(reverse(index))
 
-            else:
-                return render(request, "errorpage.html", {
-                    "message": "Your bid is not high enough."
-                })
+            return render(request, "auctions/errorpage.html", {
+                "message": "Your bid must be higher than the current price."
+            })
 
 
 def close(request, listing_id):
@@ -239,7 +233,13 @@ def comment(request, listing_id):
             comment = Comment(listing= listing, commenter=User.objects.get(id=request.user.id), comment=content)
             comment.save()
 
-    return listing(request, listing_id)
+        return listing_page(request, listing_id)
+
+    # else:
+    #     return render(request, "auctions/errorpage.html", {
+    #         "message": "Not possible"
+    #     })
+
 
 
 def watchlist(request):

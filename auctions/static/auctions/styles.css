@@ -1,15 +1,15 @@
 body {
     padding: 10px;
     background-color: #ddccdd;
+    font-family: sans-serif;
 }
 
 .header {
     margin: auto;
     max-width: 30%;
     text-align: center;
-    border: 2px solid black;
+    border: 5px solid #666666;
     border-radius: 10px;
-    border-color: green;
     margin-bottom: 15px;
 }
 
@@ -17,12 +17,20 @@ body {
     background-color: #eeeeee;
     border: 5px solid #dddddd;
     border-radius: 50px;
+    height: 80%;
+    /* width: 80%; */
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: 10px 20px;
 }
 
 .listing_item {
-    width: 40%;
+    /* width: 40%; */
+    display: grid;
+    grid-template-colums: 50% 50%;
     color: black;
-    border: 2px solid black;
+    border: 4px solid black;
+    border-radius: 40px;
     margin: 50px;
     padding: 20px;
     background-color: #ddffdd;
@@ -37,10 +45,6 @@ body {
     height: 300px;
     display: flex;
     justify-content: center;
-}
-
-.image_center {
-
 }
 
 .listing_image img {
@@ -58,7 +62,7 @@ body {
 }
 
 .listing_image, .listing_title, .listing_price, .listing_description, .listing_owner {
-    border: 1px groove red;
+    border: 3px groove #aaaaaa;
     border-radius: 10px;
     font-family: sans-serif;
     padding: 5px;
@@ -71,12 +75,45 @@ body {
     font-weight: bold;
 }
 
+
+.close_form {
+    /* margin: 100px; */
+    margin-top: 10%;
+    margin-bottom: auto;
+    float: left;
+}
+
+.auction_image {
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    border: 3px groove #aaaaaa;
+    border-radius: 10px;
+    grid-area: a;
+    padding: 5px;
+    margin: 5px;
+}
+
+.auction_description {
+    grid-area: b;
+}
+
+.auction_price {
+    grid-area: c;
+}
+
+.auction_owner {
+    grid-area: d;
+}
+
 .auction_item {
     margin-left: 22%;
     margin-right: 30%;
     width: 50%;
     border: 2px solid black;
     padding: 20px;
+    display: grid;
+    grid-template-areas: 'a b' 'a c' 'a d';
 }
 
 .listing_container {
@@ -84,12 +121,27 @@ body {
 }
 
 .auction_bid {
+    margin-top: 10%;
+    margin-bottom: auto;
     float: left;
 }
 
 .auction_comment {
+    margin-top: 1%;
+    margin-bottom: auto;
     float: right;
+}
 
+.comments {
+    margin-top: 3px;
+    margin-bottom: 2px;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+.comment {
+    border: 1px dashed black;
+    padding: 5px;
 }
 
 .submit_listing, .submit_bidding, .submit_comment {
@@ -97,11 +149,20 @@ body {
 }
 
 .watch_form {
-    margin-left: auto;
+    margin-left: 25%;
     margin-right: auto;
+    margin-bottom: 10px;
 }
 
 .closed_listing {
     margin-left: 40%;
     width: 40%;
+}
+
+.error_header {
+    margin: auto;
+    border: 2px solid black;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 30%;
 }

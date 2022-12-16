@@ -54,4 +54,4 @@ class Comment(models.Model):
 
 
     def __str__(self):
-        return f"Comment {self.id} on listing {self.listing} written by {self.text}"
+        return f"Comment: \"{self.comment}\" on listing {self.listing} written by {self.commenter}"

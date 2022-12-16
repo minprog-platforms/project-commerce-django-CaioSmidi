@@ -3,7 +3,10 @@
 {% block body %}
 
     <div class="closed_listing">
-        <h2>{{ listing.title }}</h2>
+        
+        <div class="header">
+            <h2>{{ listing.title }}</h2>
+        </div>
         {% if listing.image_URL %}
             <div class="listing_image">
                 <img class="image_center" src="{{ listing.image_URL }}" alt="Photo of {{ listing.title }}">
